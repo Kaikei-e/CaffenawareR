@@ -7,6 +7,7 @@ use receive_api_call::greet;
 pub async fn router() -> std::io::Result<()> {
     HttpServer::new(|| App::new().service(greet))
         .bind(("127.0.0.1", 8080))?
+        .workers(2)
         .run()
         .await
 }

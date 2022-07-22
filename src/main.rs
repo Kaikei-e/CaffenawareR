@@ -1,8 +1,9 @@
 use crate::api_handler::router;
 
 pub mod api_handler;
+pub mod calculation_logic;
 
-fn main(){
+fn main() {
     router();
 }
 
