@@ -1,8 +1,8 @@
-use actix_web::{post, web, HttpResponse, Responder, Error};
-use std::os::unix::raw::time_t;
-use std::ptr::null;
+use actix_web::{post, web, Error, HttpResponse, Responder};
 use json::JsonValue;
 use serde::{Deserialize, Serialize};
+use std::os::unix::raw::time_t;
+use std::ptr::null;
 
 #[post("/hello/{name}")]
 pub async fn greet(name: web::Path<String>) -> impl Responder {
