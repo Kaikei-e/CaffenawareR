@@ -11,6 +11,7 @@ pub struct FormValue {
     pub start_end_date: StartEndDate,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct StartEndDate {
     pub start_date: time_t,
     pub end_date: time_t,
