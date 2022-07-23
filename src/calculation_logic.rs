@@ -62,7 +62,12 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
         vec_decay.push(a_decay);
     }
 
+    const TO_ZERO: f64 = 1.0;
 
+    TO_ZERO = took_caffeine as f64;
+    let vec_len = vec_decay.len();
+
+    date_at = vec_decay[vec_len - 1].time_line;
 
     dates
 }
