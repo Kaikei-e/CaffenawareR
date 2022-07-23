@@ -1,8 +1,6 @@
 use crate::api_handler::api_structure::FormValue;
 use crate::calculation_logic::calc_tmax;
-use actix_web::cookie::time::error::Format;
-use actix_web::{post, web, Error, HttpResponse, Responder};
-use json::JsonValue;
+use actix_web::{post, web, HttpResponse, Responder};
 
 #[post("/hello/{name}")]
 pub async fn greet(name: web::Path<String>) -> impl Responder {
@@ -18,7 +16,7 @@ pub async fn calc_decay(body: String) -> impl Responder {
     let result = calc_tmax(form_value);
 
     match result {
-        Ok(dates) => HttpResponse::Ok().body("received!!"),
+        Ok(_dates) => HttpResponse::Ok().body("received!!"),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }

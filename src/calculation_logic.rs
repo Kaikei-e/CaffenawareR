@@ -3,10 +3,9 @@ mod sort_date;
 mod string_to_date;
 
 use crate::api_handler::api_structure::{FormValue, StartEndDate};
-use crate::calculation_logic::calc_struct::decay_transition;
+use crate::calculation_logic::calc_struct::DecayTransition;
 use crate::calculation_logic::sort_date::sort_date;
-use chrono::{Date, Duration, ParseError, Utc};
-use std::ops::Add;
+use chrono::{Duration, ParseError};
 
 pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> {
     const CALC_METHOD2: u8 = 2;
@@ -18,7 +17,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
 
     form_value.start_end_date = dates.unwrap();
 
-    let mut took_caffeine: i32;
+    let took_caffeine: i32;
 
     if form_value.calculate_method == CALC_METHOD2 {
         took_caffeine =
@@ -30,11 +29,11 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
     let mut to_max: f64 = 1.0;
     let mut date_at: i64 = form_value.start_end_date.start_date;
 
-    let mut vec_decay: Vec<decay_transition> = Vec::new();
+    let mut vec_decay: Vec<DecayTransition> = Vec::new();
 
     let mut count = 0;
     while to_max < 10.0 * took_caffeine as f64 {
-        let mut a_decay: decay_transition = decay_transition {
+        let mut a_decay: DecayTransition = DecayTransition {
             time_line: 0,
             rest_caffeine: 1.0,
         };
@@ -68,16 +67,15 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
         vec_decay.push(a_decay);
     }
 
-    let mut to_zero: f64 = 1.0;
+    let mut to_zero: f64 = took_caffeine as f64;
     const CUT: f64 = 5.000;
 
-    to_zero = took_caffeine as f64;
     let vec_len = vec_decay.len();
 
     date_at = vec_decay[vec_len - 1].time_line;
 
     while to_zero > CUT {
-        let mut a_decay: decay_transition = decay_transition {
+        let mut a_decay: DecayTransition = DecayTransition {
             time_line: 0,
             rest_caffeine: 1.0,
         };

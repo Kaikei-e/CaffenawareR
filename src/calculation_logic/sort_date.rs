@@ -1,6 +1,5 @@
 use crate::api_handler::api_structure::StartEndDate;
 use crate::calculation_logic::string_to_date::parse_and_transform_date;
-use std::time;
 use chrono::ParseError;
 
 pub fn sort_date(date1: String, date2: String) -> Result<StartEndDate, ParseError> {
