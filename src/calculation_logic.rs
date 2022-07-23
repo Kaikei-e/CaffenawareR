@@ -62,12 +62,31 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
         vec_decay.push(a_decay);
     }
 
-    const TO_ZERO: f64 = 1.0;
+    let mut to_zero: f64 = 1.0;
+    const CUT: f64 = 5.000;
 
-    TO_ZERO = took_caffeine as f64;
+    to_zero = took_caffeine as f64;
     let vec_len = vec_decay.len();
 
     date_at = vec_decay[vec_len - 1].time_line;
+
+    for i in 0..to_zero > CUT {
+        let mut a_decay: decay_transition = decay_transition {
+            time_line: 0,
+            rest_caffeine: 1.0,
+        };
+
+        const ADD_MINUTE: Duration = Duration::minutes(1);
+        date_at += ADD_MINUTE;
+
+        a_decay.time_line = date_at;
+        to_zero *= DECAY_RATE;
+        a_decay.rest_caffeine = to_zero;
+
+        vec_decay.push(a_decay);
+    }
+
+    println!(vec_decay);
 
     dates
 }
