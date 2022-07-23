@@ -15,11 +15,14 @@ pub async fn calc_decay(body: String) -> HttpResponse {
 
     let form_value: FormValue = serde_json::from_str(&body)?;
 
-    calc_tmax(form_value);
+    let result = calc_tmax(form_value);
 
-    let result = HttpResponse
-        .content_type("application/json")
-        .body(serde_json::to_string(&form_value))
-        .unwrap();
-    result
+    //let result = HttpResponse
+    //    .content_type("application/json")
+    //    .body(serde_json::to_string(&form_value));
+
+    match result {
+        Ok(dates) => HttpResponse::Ok().json(serde_json::to_string(&dates)),
+        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    }
 }

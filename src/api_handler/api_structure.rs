@@ -11,7 +11,7 @@ pub struct FormValue {
     pub start_end_date: StartEndDate,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
 pub struct StartEndDate {
     pub start_date: i64,
     pub end_date: i64,
