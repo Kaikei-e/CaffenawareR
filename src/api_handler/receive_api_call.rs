@@ -9,17 +9,17 @@ pub async fn greet(name: web::Path<String>) -> impl Responder {
     format!("Hello {name}!")
 }
 
-//noinspection ALL
 #[post("/api/calculate_caffeine")]
 pub async fn calc_decay(body: String) -> HttpResponse {
     println!("received!!");
 
-    let form_value: FormValue = serde_json::from_str(&body);
+    let form_value: FormValue = serde_json::from_str(&body)?;
 
     calc_tmax(form_value);
 
     let result = HttpResponse
         .content_type("application/json")
-        .body(serde_json::to_string(&form_value)).unwrap();
+        .body(serde_json::to_string(&form_value))
+        .unwrap();
     result
 }

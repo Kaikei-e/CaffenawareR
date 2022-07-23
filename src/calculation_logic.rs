@@ -1,4 +1,5 @@
 mod sort_date;
+mod string_to_date;
 
 use crate::api_handler::api_structure::{FormValue, StartEndDate};
 use crate::calculation_logic::sort_date::sort_date;
