@@ -9,7 +9,7 @@ use chrono::{Date, Duration, ParseError, Utc};
 use std::ops::Add;
 
 pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> {
-    const CALC_METHOD2: i32 = 2;
+    const CALC_METHOD2: u8 = 2;
     const DRINK_PER_100ML: f64 = 100.0;
     const TMAX: f64 = 1.1333;
     const DECAY_RATE: f64 = 0.99807;
@@ -21,7 +21,8 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
     let mut took_caffeine: i32;
 
     if form_value.calculate_method == CALC_METHOD2 {
-        took_caffeine = form_value.caffeine_mg * form_value.drink_amount / DRINK_PER_100ML
+        took_caffeine =
+            ((form_value.caffeine_mg * form_value.drink_amount) as f64 / DRINK_PER_100ML) as i32
     } else {
         took_caffeine = form_value.caffeine_mg as i32
     }
@@ -31,23 +32,28 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
 
     let mut vec_decay: Vec<decay_transition> = Vec::new();
 
-    while to_max < 10.0 * took_caffeine {
+    let mut count = 0;
+    while to_max < 10.0 * took_caffeine as f64 {
         let mut a_decay: decay_transition = decay_transition {
             time_line: 0,
             rest_caffeine: 1.0,
         };
 
-        if i == 0 {
+        if count == 0 {
             a_decay.rest_caffeine = to_max;
             a_decay.time_line = date_at;
 
             vec_decay.push(a_decay);
+
+            count += 1;
             continue;
         }
 
+        count += 1;
+
         to_max *= TMAX;
-        const ADD_MINUTE: Duration = Duration::minutes(1);
-        date_at += ADD_MINUTE;
+        let add_minute: Duration = Duration::minutes(1);
+        date_at += add_minute.num_minutes();
 
         if to_max > took_caffeine as f64 {
             a_decay.rest_caffeine = took_caffeine as f64;
@@ -76,8 +82,8 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
             rest_caffeine: 1.0,
         };
 
-        const ADD_MINUTE: Duration = Duration::minutes(1);
-        date_at += ADD_MINUTE;
+        let add_minute: Duration = Duration::minutes(1);
+        date_at += add_minute.num_minutes();
 
         a_decay.time_line = date_at;
         to_zero *= DECAY_RATE;
