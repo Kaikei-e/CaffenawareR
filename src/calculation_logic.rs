@@ -31,7 +31,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
 
     let mut vec_decay: Vec<decay_transition> = Vec::new();
 
-    for i in 0..to_max < 10.0 * took_caffeine {
+    while to_max < 10.0 * took_caffeine {
         let mut a_decay: decay_transition = decay_transition {
             time_line: 0,
             rest_caffeine: 1.0,
@@ -70,7 +70,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
 
     date_at = vec_decay[vec_len - 1].time_line;
 
-    for i in 0..to_zero > CUT {
+    while to_zero > CUT {
         let mut a_decay: decay_transition = decay_transition {
             time_line: 0,
             rest_caffeine: 1.0,
@@ -86,7 +86,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
         vec_decay.push(a_decay);
     }
 
-    println!(vec_decay);
+    println!("{}", vec_decay[0].time_line);
 
     dates
 }
