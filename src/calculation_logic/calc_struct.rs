@@ -1,6 +1,4 @@
-use chrono::{Date, Utc};
-
 pub struct decay_transition {
-    time_line: Date<Utc>,
-    rest_caffeine: f64,
+    pub time_line: i64,
+    pub rest_caffeine: f64,
 }
