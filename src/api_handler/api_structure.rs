@@ -7,7 +7,7 @@ pub struct FormValue {
     pub caffeine_mg: u16,
     pub drink_amount: u16,
     pub calculate_method: u8,
-    pub start_end_date: StartEndDate,
+    pub start_end_date: Option<StartEndDate>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, Copy)]

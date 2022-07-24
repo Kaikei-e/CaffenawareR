@@ -2,20 +2,22 @@ mod calc_struct;
 mod sort_date;
 mod string_to_date;
 
+use std::borrow::Borrow;
 use crate::api_handler::api_structure::{FormValue, StartEndDate};
 use crate::calculation_logic::calc_struct::DecayTransition;
 use crate::calculation_logic::sort_date::sort_date;
-use chrono::{Duration, ParseError};
+use chrono::Duration;
+use serde_json::Error;
 
-pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> {
+pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
     const CALC_METHOD2: u8 = 2;
     const DRINK_PER_100ML: f64 = 100.0;
     const TMAX: f64 = 1.1333;
     const DECAY_RATE: f64 = 0.99807;
 
-    let dates: Result<StartEndDate, ParseError> = sort_date(form_value.date1, form_value.date2);
+    let dates: Result<StartEndDate, Error> = sort_date(form_value.date1, form_value.date2);
 
-    form_value.start_end_date = dates.unwrap();
+    form_value.start_end_date = *Option::from(dates.unwrap()).borrow();
 
     let took_caffeine: i32;
 
@@ -27,7 +29,8 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, ParseError> 
     }
 
     let mut to_max: f64 = 1.0;
-    let mut date_at: i64 = form_value.start_end_date.start_date;
+    let dates_unwrap: StartEndDate = form_value.start_end_date.unwrap();
+    let mut date_at: i64 = dates_unwrap.start_date;
 
     let mut vec_decay: Vec<DecayTransition> = Vec::new();
 

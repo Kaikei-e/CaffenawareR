@@ -1,8 +1,7 @@
 use crate::api_handler::api_structure::StartEndDate;
 use crate::calculation_logic::string_to_date::parse_and_transform_date;
-use chrono::ParseError;
 
-pub fn sort_date(date1: String, date2: String) -> Result<StartEndDate, ParseError> {
+pub fn sort_date(date1: String, date2: String) -> Result<StartEndDate, serde_json::Error> {
     let parsed_d1 = parse_and_transform_date(date1);
     let parsed_d2 = parse_and_transform_date(date2);
 

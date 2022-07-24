@@ -16,7 +16,7 @@ pub async fn calc_decay(body: String) -> impl Responder {
     let result = calc_tmax(form_value);
 
     match result {
-        Ok(_dates) => HttpResponse::Ok().body("received!!"),
+        Ok(_) => HttpResponse::Ok().body("received!!"),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }
