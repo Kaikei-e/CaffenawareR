@@ -8,6 +8,8 @@ use crate::calculation_logic::calc_struct::DecayTransition;
 use crate::calculation_logic::sort_date::sort_date;
 use chrono::Duration;
 use serde_json::Error;
+use std::option::Option;
+
 
 pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
     const CALC_METHOD2: u8 = 2;
@@ -17,7 +19,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
 
     let dates: Result<StartEndDate, Error> = sort_date(form_value.date1, form_value.date2);
 
-    form_value.start_end_date = *Option::from(dates.as_ref().unwrap()).borrow();
+    form_value.start_end_date = *Option::from(dates.unwrap()).borrow();
 
     let took_caffeine: i32;
 
@@ -95,5 +97,5 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
 
     println!("{}", vec_decay[0].time_line);
 
-    dates
+    form_value.start_end_date.ok_or(Err("error borrow occurred").unwrap())
 }
