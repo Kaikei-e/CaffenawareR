@@ -17,7 +17,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
 
     let dates: Result<StartEndDate, Error> = sort_date(form_value.date1, form_value.date2);
 
-    form_value.start_end_date = *Option::from(dates.unwrap()).borrow();
+    form_value.start_end_date = *Option::from(dates.as_ref().unwrap()).borrow();
 
     let took_caffeine: i32;
 
