@@ -1,3 +1,5 @@
+extern crate core;
+
 use crate::api_handler::router;
 
 pub mod api_handler;

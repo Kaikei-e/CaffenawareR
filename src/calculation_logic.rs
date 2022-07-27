@@ -2,22 +2,23 @@ mod calc_struct;
 mod sort_date;
 mod string_to_date;
 
-use std::borrow::Borrow;
 use crate::api_handler::api_structure::{FormValue, StartEndDate};
 use crate::calculation_logic::calc_struct::DecayTransition;
 use crate::calculation_logic::sort_date::sort_date;
-use chrono::Duration;
+use chrono::{DateTime, Utc, Duration as ChronDur};
 use serde_json::Error;
+use std::borrow::Borrow;
 use std::option::Option;
+use std::time::{Duration, UNIX_EPOCH};
 
-
-pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
+pub fn calc_tmax(mut form_value: FormValue) -> String {
     const CALC_METHOD2: u8 = 2;
     const DRINK_PER_100ML: f64 = 100.0;
     const TMAX: f64 = 1.1333;
     const DECAY_RATE: f64 = 0.99807;
 
     let dates: Result<StartEndDate, Error> = sort_date(form_value.date1, form_value.date2);
+    let date_c = &dates.as_ref().unwrap();
 
     form_value.start_end_date = *Option::from(dates.unwrap()).borrow();
 
@@ -56,7 +57,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
         count += 1;
 
         to_max *= TMAX;
-        let add_minute: Duration = Duration::minutes(1);
+        let add_minute: ChronDur = ChronDur::minutes(1);
         date_at += add_minute.num_minutes();
 
         if to_max > took_caffeine as f64 {
@@ -85,7 +86,7 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
             rest_caffeine: 1.0,
         };
 
-        let add_minute: Duration = Duration::minutes(1);
+        let add_minute: ChronDur = ChronDur::minutes(1);
         date_at += add_minute.num_minutes();
 
         a_decay.time_line = date_at;
@@ -97,5 +98,11 @@ pub fn calc_tmax(mut form_value: FormValue) -> Result<StartEndDate, Error> {
 
     println!("{}", vec_decay[0].time_line);
 
-    form_value.start_end_date.ok_or(Err("error borrow occurred").unwrap())
+    let d_unix = UNIX_EPOCH + Duration::from_secs(date_c.start_date as u64);
+    // Create DateTime from SystemTime
+    let return_datetime = DateTime::<Utc>::from(d_unix);
+    // Formats the combined date and time with the specified format string.
+    let timestamp_str = return_datetime.format("%Y-%m-%d %H:%M:%S").to_string();
+
+    timestamp_str
 }
