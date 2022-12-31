@@ -1,3 +1,5 @@
+mod calculate;
+
 use axum::{
     http::StatusCode,
     response::IntoResponse,
@@ -27,6 +29,8 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+
+    calculate::calculate_decay::calculate_logic();
 }
 
 // basic handler that responds with a static string
