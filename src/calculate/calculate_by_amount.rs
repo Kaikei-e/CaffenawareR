@@ -1,4 +1,3 @@
-use crate::caffine_info::caffeine_info;
 use crate::caffine_info::caffeine_info::{CaffeineInfo, CaffeineResult};
 
 const TMAX_RATE: f64 = 1.1333;
@@ -11,8 +10,8 @@ pub fn calculate_by_amount(caffeine: CaffeineInfo) -> CaffeineResult {
         time: vec![],
     };
 
-    let tmax_time = calculate_tmax(caffeine_list, total_caffeine);
-    calculate_decay(tmax_time, total_caffeine)
+    let calculated_tmax = calculate_tmax(caffeine_list, total_caffeine);
+    calculate_decay(calculated_tmax)
 }
 
 fn total_caffeine_per100(drink_amount: f64, caffeine_mg: f64) -> f64 {
@@ -35,21 +34,32 @@ fn calculate_tmax(caffe_list: CaffeineResult, total_caffeine: f64) -> CaffeineRe
     caffeine_list
 }
 
-fn calculate_decay(mut caffeine_result: CaffeineResult, total_caffeine: f64) -> CaffeineResult {
-    let ref_results = &caffeine_result;
-    let results =  &caffeine_result;
+// 2nd parameter:  , total_caffeine: f64
+fn calculate_decay(mut results: CaffeineResult) -> CaffeineResult {
+    let ref_results = results;
 
     let caffeine = ref_results.caffeine_mg.last();
     let caffeine_tmax = ref_results.caffeine_mg.last().unwrap().abs();
     let time = ref_results.time.last();
 
+    let mut decay: Vec<f64> = Vec::new();
+    let mut t: Vec<i64> = Vec::new();
+
     while caffeine_tmax > 5.0 {
+
         let caffeine = &caffeine.unwrap().abs();
         let time = &time.unwrap().abs();
 
-        caffeine_result.caffeine_mg.push(caffeine * HALF_LIFE);
-        results.time.push(time + 1);
+        results.caffeine_mg.push(caffeine * HALF_LIFE);
+
+
+        results.time.push(time + 60);
     }
 
-    caffeine_result
+    let results = CaffeineResult {
+        caffeine_mg: decay,
+        time: t,
+    };
+
+    results
 }
