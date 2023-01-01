@@ -11,5 +11,12 @@ pub(crate) async fn calculate_decay(
 }
 
 pub fn calculate_logic(caffeine_info: caffeine_info::CaffeineInfo) -> caffeine_info::CaffeineInfo {
-    caffeine_info
+    const BY_CAFFEINE_AMOUNT: u8 = 1;
+    const BY_DRINK_AMOUNT: u8 = 2;
+
+    match caffeine_info.method {
+        BY_CAFFEINE_AMOUNT => caffeine_info,
+        BY_DRINK_AMOUNT => caffeine_info,
+        _ => panic!(),
+    }
 }
