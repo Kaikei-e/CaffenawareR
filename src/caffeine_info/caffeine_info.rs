@@ -9,6 +9,7 @@ pub struct CaffeineInfo {
     pub(crate) bottle_ml: f64,
 }
 
+#[derive(Serialize)]
 pub struct CaffeineResult {
     pub caffeine_mg: Vec<f64>,
     pub time: Vec<i64>,

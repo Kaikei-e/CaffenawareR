@@ -1,4 +1,4 @@
-use crate::caffine_info::caffeine_info::{CaffeineInfo, CaffeineResult};
+use crate::caffeine_info::caffeine_info::{CaffeineInfo, CaffeineResult};
 
 const TMAX_RATE: f64 = 1.1333;
 const HALF_LIFE: f64 = 0.981924;

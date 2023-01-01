@@ -1,4 +1,4 @@
-mod caffine_info;
+mod caffeine_info;
 mod calculate;
 
 use axum::{
