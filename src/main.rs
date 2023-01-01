@@ -1,3 +1,4 @@
+mod caffine_info;
 mod calculate;
 
 use axum::{
@@ -19,7 +20,8 @@ async fn main() {
         // `GET /` goes to `root`
         .route("/", get(root))
         // `POST /users` goes to `create_user`
-        .route("/users", post(create_user));
+        .route("/users", post(create_user))
+        .route("/calculate/decay", post(calculate::calculate_decay::calculate_decay));
 
     // run our app with hyper
     // `axum::Server` is a re-export of `hyper::Server`
@@ -29,8 +31,6 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
-
-    calculate::calculate_decay::calculate_logic();
 }
 
 // basic handler that responds with a static string
