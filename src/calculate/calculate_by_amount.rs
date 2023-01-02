@@ -1,5 +1,6 @@
 use crate::caffeine_info::caffeine_info::{CaffeineInfo, CaffeineResult};
 
+
 const TMAX_RATE: f64 = 1.1333;
 const HALF_LIFE: f64 = 0.981924;
 
@@ -20,15 +21,19 @@ fn total_caffeine_per100(drink_amount: f64, caffeine_mg: f64) -> f64 {
 
 fn calculate_tmax(caffe_list: CaffeineResult, total_caffeine: f64) -> CaffeineResult {
     let mut gain: f64 = 1.0;
+    let t = *match caffe_list.time.last() {
+        Some(x) => x,
+        None => todo!(),
+    };
+
     let mut caffeine_list = caffe_list;
 
     while total_caffeine > gain {
         gain *= TMAX_RATE;
+        let t = t + 60;
 
         caffeine_list.caffeine_mg.push(gain);
-        caffeine_list
-            .time
-            .push(caffeine_list.time.last().unwrap() + 60);
+        caffeine_list.time.push(t);
     }
 
     caffeine_list
