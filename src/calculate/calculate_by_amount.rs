@@ -11,9 +11,7 @@ pub fn calculate_by_amount(caffeine: CaffeineInfo) -> CaffeineResult {
     };
 
     let calculated_tmax = calculate_tmax(caffeine_list, total_caffeine);
-    let calculated_mg_and_tmax = calculate_decay(calculated_tmax);
-
-    return calculated_mg_and_tmax;
+    calculate_decay(calculated_tmax)
 }
 
 fn total_caffeine_per100(drink_amount: f64, caffeine_mg: f64) -> f64 {
